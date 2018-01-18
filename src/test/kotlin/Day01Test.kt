@@ -33,4 +33,34 @@ class Day01Test {
         val day = Day01()
         Assert.assertEquals(9, day.part1("91212129"))
     }
+
+    @Test
+    fun test21() {
+        val day = Day01()
+        Assert.assertEquals(6, day.part2("1212"))
+    }
+
+    @Test
+    fun test22() {
+        val day = Day01()
+        Assert.assertEquals(0, day.part2("1221"))
+    }
+
+    @Test
+    fun test23() {
+        val day = Day01()
+        Assert.assertEquals(4, day.part2("123425"))
+    }
+
+    @Test
+    fun test24() {
+        val day = Day01()
+        Assert.assertEquals(12, day.part2("123123"))
+    }
+
+    @Test
+    fun test25() {
+        val day = Day01()
+        Assert.assertEquals(4, day.part2("12131415"))
+    }
 }
