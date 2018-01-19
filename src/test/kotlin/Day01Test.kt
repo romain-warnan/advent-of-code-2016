@@ -1,7 +1,6 @@
 
 import day01.Day01
 import org.junit.Assert
-import org.junit.BeforeClass
 import org.junit.Test
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -9,13 +8,6 @@ import java.nio.file.Paths
 class Day01Test {
 
     private val day = Day01()
-
-    companion object {
-        @BeforeClass
-        fun beforeClass() {
-            println("Day 01")
-        }
-    }
 
     @Test
     fun part1() {
