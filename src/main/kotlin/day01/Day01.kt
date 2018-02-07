@@ -7,12 +7,12 @@ class Day01 {
     fun part1(input: String): Long {
         val point = Point()
         input.split(",")
-                .map { s -> s.trim() }
-                .forEach{ s -> point.turnAndMove(s) }
+            .map { s -> s.trim() }
+            .forEach{ s -> point.turnAndMove(s) }
         return point.manhattanDistance()
     }
 
-     data class Point(private var x: Long = 0, private var y: Long = 0, private var way: Way = Way.NORTH) {
+     class Point(private var x: Long = 0, private var y: Long = 0, private var way: Way = Way.NORTH) {
 
         fun turnAndMove (move: String) {
             turn(Turn.valueOf(move[0].toString()))

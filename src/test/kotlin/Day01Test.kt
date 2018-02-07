@@ -2,8 +2,7 @@
 import day01.Day01
 import org.junit.Assert
 import org.junit.Test
-import java.nio.file.Files
-import java.nio.file.Paths
+import java.io.File
 
 class Day01Test {
 
@@ -11,17 +10,11 @@ class Day01Test {
 
     @Test
     fun part1() {
-        val input = Files.newBufferedReader(Paths.get("src/main/resources/input01")).readLine()
+        val input = File("src/main/resources/input01").bufferedReader().readLine()
         val val1 = day.part1(input)
         Assert.assertEquals(273, val1)
         println("Part 1 : $val1")
     }
-
-    /*
-    Following R2, L3 leaves you 2 blocks East and 3 blocks North, or 5 blocks away.
-    R2, R2, R2 leaves you 2 blocks due South of your starting position, which is 2 blocks away.
-    R5, L5, R5, R3 leaves you 12 blocks away.
-    */
 
     @Test
     fun test11() {
