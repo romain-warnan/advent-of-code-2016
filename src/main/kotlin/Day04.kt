@@ -2,7 +2,8 @@ import java.io.File
 
 class Day04 {
 
-   private val regex = "(.*)-(\\d+)\\[(.*)]".toRegex()
+    private val a = 'a'.toInt()
+    private val regex = "(.*)-(\\d+)\\[(.*)]".toRegex()
 
     fun part1(path: String): Int {
         return File(path).bufferedReader().lines()
@@ -10,6 +11,16 @@ class Day04 {
             .filter{ it.isReal() }
             .mapToInt { it.sectorID }
             .sum()
+    }
+
+    fun part2(path: String): Int {
+        return File(path).bufferedReader().lines()
+            .map { room(it)!! }
+            .filter{ it.isReal() }
+            .filter {decrypt(it) == "northpole object storage"}
+            .map { it.sectorID }
+            .findFirst()
+            .get()
     }
 
     private fun room(line: String): Room? {
@@ -21,7 +32,7 @@ class Day04 {
         return null
     }
 
-    data class Room(private val encryptedName: String, val sectorID: Int, private val checksum: String) {
+    data class Room(val encryptedName: String, val sectorID: Int, private val checksum: String) {
 
         fun isReal() = checksum == calculateChecksum()
 
@@ -34,5 +45,16 @@ class Day04 {
             .sortedByDescending { it.value }
             .take(5)
             .joinToString(separator = "", transform = { it.key.toString() })
+    }
+
+    fun decrypt(room: Room): String {
+        return room.encryptedName.toCharArray()
+            .map { moveLetter(it, room.sectorID) }
+            .joinToString(separator = "", transform = { it.toString() })
+    }
+
+    private fun moveLetter(letter: Char, times: Int) = when (letter) {
+        '-' -> ' '
+        else -> (a + (letter.toInt() - a + times) % 26).toChar()
     }
 }
