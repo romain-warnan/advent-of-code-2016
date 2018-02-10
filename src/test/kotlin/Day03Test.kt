@@ -1,3 +1,4 @@
+
 import org.junit.Assert
 import org.junit.Test
 
@@ -13,7 +14,19 @@ class Day03Test {
     }
 
     @Test
+    fun part2() {
+        val answer = day.part2("src/main/resources/input03")
+        println("Part 2 : $answer")
+        Assert.assertEquals(1826, answer)
+    }
+
+    @Test
     fun test1() {
         Assert.assertEquals(3, day.part1("src/test/resources/input03"))
+    }
+
+    @Test
+    fun test2() {
+        Assert.assertEquals(6, day.part2("src/test/resources/input03"))
     }
 }
