@@ -11,63 +11,51 @@ class Day02 {
         arrayOf('.', '.', '1', '.', '.'),
         arrayOf('.', '2', '3', '4', '.'),
         arrayOf('5', '6', '7', '8', '9'),
-        arrayOf('.', 'A', 'B', 'D', '.'),
-        arrayOf('.', '.', 'E', '.', '.')
+        arrayOf('.', 'A', 'B', 'C', '.'),
+        arrayOf('.', '.', 'D', '.', '.')
     )
 
     fun part1(path: String): String {
+        val startingPoint = Point(keypad1, 1, 1)
+        return code(path, startingPoint)
+    }
+
+    fun part2(path: String): String {
+        val startingPoint = Point(keypad2, 2, 0)
+        return code(path, startingPoint)
+    }
+
+    private fun code(path: String, point: Point): String {
         var code = ""
-        val point = Point()
         File(path).bufferedReader().lines()
                 .forEach {
                     it.forEach {
                         point.move(it)
                     }
-                    code += point.pointValue(keypad1)
+                    code += point.pointValue()
                 }
         return code
     }
 
-
-    fun part2(path: String): String {
-        return "ROMAIN"
-    }
-
-    class Point (private var row: Int = 1, private var col: Int = 1) {
+    class Point (private val keypad: Array<Array<Char>>, private var row: Int, private var col: Int) {
 
         fun move (way: Char) {
             when(way) {
-                'U' -> row --
-                'R' -> col ++
-                'D' -> row ++
-                'L' -> col --
-            }
-            checkPoint()
-        }
-
-        fun pointValue(keypad: Array<Array<Char>>) = keypad[row][col]
-
-        private fun checkPoint () {
-            checkRow()
-            checkCol()
-        }
-
-        private fun checkRow() {
-            if (row < 0) {
-                row = 0
-            }
-            if (row > 2) {
-                row = 2
+                'U' -> if (row > 0 && keypad[row - 1][col] != '.') {
+                    row --
+                }
+                'L' -> if (col > 0 && keypad[row][col - 1] != '.') {
+                    col --
+                }
+                'D' -> if (row < keypad.size - 1 && keypad[row + 1][col] != '.') {
+                    row ++
+                }
+                'R' -> if (col < keypad.size - 1 && keypad[row][col + 1] != '.') {
+                    col ++
+                }
             }
         }
 
-        private fun checkCol() {
-            if (col < 0) {
-                col = 0
-            }
-            if (col > 2) {
-                col = 2
-            }
-        }
+        fun pointValue() = keypad[row][col]
     }
 }

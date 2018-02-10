@@ -9,15 +9,15 @@ class Day02Test {
     @Test
     fun part1() {
         val answer = day.part1("src/main/resources/input02")
-        Assert.assertEquals("45973", answer)
         println("Part 1 : $answer")
+        Assert.assertEquals("45973", answer)
     }
 
     @Test
     fun part2() {
         val answer = day.part2("src/main/resources/input02")
-        Assert.assertEquals("45973", answer)
         println("Part 2 : $answer")
+        Assert.assertEquals("27CA4", answer)
     }
 
     @Test
