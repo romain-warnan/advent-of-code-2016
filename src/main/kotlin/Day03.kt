@@ -11,9 +11,9 @@ class Day03 {
 
     fun part2(path: String): Long {
         val lines = File(path).bufferedReader().readLines()
-        val n = (lines.size / 3) - 1
+        val n = (lines.size / 3)
         var numberOfTriangle = 0L
-        for (index in 0..n) {
+        for (index in 0..(n - 1)) {
             if (triplet(lines, index, 0).isTriangle()) numberOfTriangle ++
             if (triplet(lines, index, 1).isTriangle()) numberOfTriangle ++
             if (triplet(lines, index, 2).isTriangle()) numberOfTriangle ++
@@ -22,11 +22,13 @@ class Day03 {
     }
 
     private fun triplet(lines: List<String>, row: Int, col: Int): Triplet {
-        val x = lines[3 * row + 0].trim().split(" +".toRegex())[col].toInt()
-        val y = lines[3 * row + 1].trim().split(" +".toRegex())[col].toInt()
-        val z = lines[3 * row + 2].trim().split(" +".toRegex())[col].toInt()
+        val x = findValue(lines[3 * row + 0], col)
+        val y = findValue(lines[3 * row + 1], col)
+        val z = findValue(lines[3 * row + 2], col)
         return Triplet(x, y, z)
     }
+
+    private fun findValue(line: String, col: Int) = line.trim().split(" +".toRegex())[col].toInt()
 
     private fun triplet(line: String): Triplet {
         val tokens = line.trim().split(" +".toRegex())
