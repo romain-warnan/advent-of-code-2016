@@ -14,6 +14,6 @@ class Day03Test {
 
     @Test
     fun test1() {
-        Assert.assertEquals(1, day.part1("src/test/resources/input03"))
+        Assert.assertEquals(3, day.part1("src/test/resources/input03"))
     }
 }
