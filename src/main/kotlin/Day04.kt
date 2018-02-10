@@ -4,11 +4,12 @@ class Day04 {
 
    private val regex = "(.*)-(\\d+)\\[(.*)]".toRegex()
 
-    fun part1(path: String): Long {
-        File(path).bufferedReader().lines()
-            .map { line -> room(line) }
-            .forEach { println(it) }
-        return -1
+    fun part1(path: String): Int {
+        return File(path).bufferedReader().lines()
+            .map { room(it)!! }
+            .filter{ it.isReal() }
+            .mapToInt { it.sectorID }
+            .sum()
     }
 
     private fun room(line: String): Room? {
@@ -20,5 +21,18 @@ class Day04 {
         return null
     }
 
-    data class Room(val encryptedName: String, val sectorID: Int, val checksum: String)
+    data class Room(private val encryptedName: String, val sectorID: Int, private val checksum: String) {
+
+        fun isReal() = checksum == calculateChecksum()
+
+        private fun calculateChecksum () = encryptedName.replace("-", "")
+            .toCharArray()
+            .sortedArray()
+            .groupBy { it }
+            .mapValues { it.value.size }
+            .entries
+            .sortedByDescending { it.value }
+            .take(5)
+            .joinToString(separator = "", transform = { it.key.toString() })
+    }
 }
