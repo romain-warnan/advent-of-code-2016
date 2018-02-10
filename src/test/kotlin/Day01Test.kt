@@ -1,5 +1,4 @@
 
-import day01.Day01
 import org.junit.Assert
 import org.junit.Test
 import java.io.File

@@ -1,5 +1,3 @@
-package day01
-
 import kotlin.math.abs
 
 class Day01 {
