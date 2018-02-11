@@ -14,21 +14,21 @@ class Day07Test {
 
     @Test
     fun test11() {
-        Assert.assertTrue(day.supportsTLS("abba[mnop]qrst"))
+         Assert.assertTrue(day.supportsTLS("abba[mnop]qrst"))
     }
 
     @Test
     fun test12() {
-        Assert.assertFalse(day.supportsTLS("abcd[bddb]xyyx"))
+         Assert.assertFalse(day.supportsTLS("abcd[bddb]xyyx"))
     }
 
     @Test
     fun test13() {
-        Assert.assertFalse(day.supportsTLS("aaaa[qwer]tyui"))
+         Assert.assertFalse(day.supportsTLS("aaaa[qwer]tyui"))
     }
 
     @Test
     fun test14() {
-        Assert.assertTrue(day.supportsTLS("ioxxoj[asdfgh]zxcvbn"))
+         Assert.assertTrue(day.supportsTLS("ioxxoj[asdfgh]zxcvbn"))
     }
 }
