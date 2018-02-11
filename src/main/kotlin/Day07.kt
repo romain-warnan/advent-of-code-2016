@@ -2,6 +2,8 @@ import java.io.File
 
 class Day07 {
 
+    private val regex = "(?:(\\w+)\\[(\\w+)])+(\\w+)".toRegex()
+
     fun part1(path: String): Long {
         return File(path).bufferedReader().lines()
             .filter { supportsTLS(it) }
@@ -9,13 +11,22 @@ class Day07 {
     }
 
     fun supportsTLS(ip: String): Boolean {
-        return false
+        var oneOtherContainsABBA = false
+        var noHypernetContainsABBA = true
+        val groupValues = regex.matchEntire(ip)!!.groupValues
+        for (index in 1..groupValues.lastIndex) {
+            val input = groupValues[index]
+            if (index % 2 == 0) {
+                noHypernetContainsABBA = noHypernetContainsABBA && !containsABBA(input)
+            } else {
+                oneOtherContainsABBA = oneOtherContainsABBA || containsABBA(input)
+            }
+        }
+        return oneOtherContainsABBA && noHypernetContainsABBA
     }
 
-    fun containsABBA(input: String): Boolean {
-        if (input.length < 4) {
-            return false
-        }
+    private fun containsABBA(input: String): Boolean {
+        if (input.length < 4) return false
         val letters = input.toCharArray()
         val last = letters.size - 3
         return (1..last).any {
