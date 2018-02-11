@@ -44,13 +44,13 @@ class Day04 {
             .entries
             .sortedByDescending { it.value }
             .take(5)
-            .joinToString(separator = "", transform = { it.key.toString() })
+            .joinToString(""){ it.key.toString() }
     }
 
     fun decrypt(room: Room): String {
         return room.encryptedName.toCharArray()
             .map { moveLetter(it, room.sectorID) }
-            .joinToString(separator = "", transform = { it.toString() })
+            .joinToString(""){ it.toString() }
     }
 
     private fun moveLetter(letter: Char, times: Int) = when (letter) {
