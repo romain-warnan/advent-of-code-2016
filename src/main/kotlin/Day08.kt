@@ -3,7 +3,7 @@ import java.io.File
 class Day08 {
 
     fun part1(path: String, width: Int = 50, height: Int = 6): Int {
-        val screen = Array(height, {CharArray(width) {'.'}})
+        val screen = Array(height, {CharArray(width) {' '}})
         File(path).bufferedReader()
             .lines()
             .map { fromLine(it) }
@@ -12,6 +12,15 @@ class Day08 {
             .flatMap { it.asIterable() }
             .filter { it == '#' }
             .count()
+    }
+
+    fun part2(path: String, width: Int = 50, height: Int = 6) {
+        val screen = Array(height, {CharArray(width) {' '}})
+        File(path).bufferedReader()
+            .lines()
+            .map { fromLine(it) }
+            .forEach { it.apply(screen) }
+            .also { screen.forEach { println(it) }}
     }
 
     private val rectRegex = "rect (\\d+)x(\\d+)".toRegex()
