@@ -28,7 +28,6 @@ class Day08 {
         fun apply(screen: Array<CharArray>)
     }
 
-
     data class Rect (private val width: Int, private val height: Int): Operation {
         override fun apply(screen: Array<CharArray>) {
             for (x in 0 until width) {
@@ -41,7 +40,11 @@ class Day08 {
 
     data class RotateCol (private val row: Int, private val step: Int): Operation {
         override fun apply(screen: Array<CharArray>) {
-            // TODO Code de apply dans RotateCol
+            val size = screen[0].size
+            val shiftedRow = CharArray(size) {'.'}
+            screen[row].forEachIndexed({
+                index, value -> shiftedRow[(index + step) % size] = value
+            })
         }
     }
 
