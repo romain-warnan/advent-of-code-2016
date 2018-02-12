@@ -9,7 +9,7 @@ class Day07Test {
     fun part1() {
         val answer = day.part1("src/main/resources/input07")
         println("Part 1 : $answer")
-        Assert.assertEquals(0, answer)
+        Assert.assertEquals(110, answer)
     }
 
     @Test
@@ -30,5 +30,10 @@ class Day07Test {
     @Test
     fun test14() {
          Assert.assertTrue(day.supportsTLS("ioxxoj[asdfgh]zxcvbn"))
+    }
+
+    @Test
+    fun test15() {
+        Assert.assertEquals(2, day.part1("src/test/resources/input07"))
     }
 }
