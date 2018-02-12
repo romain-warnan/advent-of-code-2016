@@ -31,4 +31,9 @@ class Day07Test {
     fun test14() {
          Assert.assertTrue(day.supportsTLS("ioxxoj[asdfgh]zxcvbn"))
     }
+
+    @Test
+    fun test15() {
+        Assert.assertEquals(2, day.part1("src/test/resources/input07"))
+    }
 }
