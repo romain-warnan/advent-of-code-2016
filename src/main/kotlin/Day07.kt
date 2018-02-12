@@ -2,7 +2,7 @@ import java.io.File
 
 class Day07 {
 
-    private val regex = "(?:(\\w+)\\[(\\w+)])+(\\w+)".toRegex()
+    // private val regex = "(?:(\\w+)\\[(\\w+)])+(\\w+)".toRegex()
 
     fun part1(path: String): Long {
         return File(path).bufferedReader().lines()
@@ -13,13 +13,13 @@ class Day07 {
     fun supportsTLS(ip: String): Boolean {
         var oneOtherContainsABBA = false
         var noHypernetContainsABBA = true
-        val groupValues = regex.matchEntire(ip)!!.groupValues
-        for (index in 1..groupValues.lastIndex) {
-            val input = groupValues[index]
+
+        val groups = ip.split("\\[|]".toRegex())
+        for ((index, group) in groups.withIndex()) {
             if (index % 2 == 0) {
-                noHypernetContainsABBA = noHypernetContainsABBA && !containsABBA(input)
+                oneOtherContainsABBA = oneOtherContainsABBA || containsABBA(group)
             } else {
-                oneOtherContainsABBA = oneOtherContainsABBA || containsABBA(input)
+                noHypernetContainsABBA = noHypernetContainsABBA && !containsABBA(group)
             }
         }
         return oneOtherContainsABBA && noHypernetContainsABBA
