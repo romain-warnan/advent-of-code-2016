@@ -13,6 +13,13 @@ class Day07Test {
     }
 
     @Test
+    fun part2() {
+        val answer = day.part2("src/main/resources/input07")
+        println("Part 2 : $answer")
+        Assert.assertEquals(242, answer)
+    }
+
+    @Test
     fun test11() {
          Assert.assertTrue(day.supportsTLS("abba[mnop]qrst"))
     }
@@ -35,5 +42,25 @@ class Day07Test {
     @Test
     fun test15() {
         Assert.assertEquals(2, day.part1("src/test/resources/input07"))
+    }
+
+    @Test
+    fun test21() {
+        Assert.assertTrue(day.supportsSSL("aba[bab]xyz"))
+    }
+
+    @Test
+    fun test22() {
+        Assert.assertFalse(day.supportsSSL("xyx[xyx]xyx"))
+    }
+
+    @Test
+    fun test23() {
+        Assert.assertTrue(day.supportsSSL("aaa[kek]eke"))
+    }
+
+    @Test
+    fun test24() {
+        Assert.assertTrue(day.supportsSSL("zazbz[bzb]cdb"))
     }
 }
