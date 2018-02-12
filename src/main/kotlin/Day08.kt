@@ -1,15 +1,24 @@
+import java.io.File
+
 class Day08 {
 
-    fun part1(path: String, width: Int = 50, height: Int = 6): Long {
+    fun part1(path: String, width: Int = 50, height: Int = 6): Int {
         val screen = Array(height, {CharArray(width) {'.'}})
-        return (width * height).toLong()
+        File(path).bufferedReader()
+            .lines()
+            .map { fromLine(it) }
+            .forEach { it.apply(screen) }
+        return screen
+            .flatMap { it.asIterable() }
+            .filter { it == '#' }
+            .count()
     }
 
     private val rectRegex = "rect (\\d+)x(\\d+)".toRegex()
     private val rectRotateRow = "rotate row y=(\\d+) by (\\d+)".toRegex()
     private val rectRotateColumn = "rotate column x=(\\d+) by (\\d+)".toRegex()
 
-    fun fromLine(line: String): Operation = when {
+    private fun fromLine(line: String): Operation = when {
         rectRotateRow.matches(line) -> {
             val groups = rectRotateRow.matchEntire(line)!!.groupValues
             RotateCol(groups[1].toInt(), groups[2].toInt())
@@ -45,12 +54,20 @@ class Day08 {
             screen[row].forEachIndexed({
                 index, value -> shiftedRow[(index + step) % size] = value
             })
+            screen[row] = shiftedRow
         }
     }
 
     data class RotateRow (private val column: Int, private val step: Int): Operation {
         override fun apply(screen: Array<CharArray>) {
-            // TODO Code de apply dans RotateRow
+            val size = screen.size
+            val shiftedColumn = CharArray(size) {'.'}
+            screen.forEachIndexed({
+                index, value -> shiftedColumn[(index + step) % size] = value[column]
+            })
+            shiftedColumn.forEachIndexed({
+                index, value -> screen[index][column] = value
+            })
         }
     }
 }
