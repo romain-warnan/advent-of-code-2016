@@ -2,8 +2,6 @@ import java.io.File
 
 class Day07 {
 
-    // private val regex = "(?:(\\w+)\\[(\\w+)])+(\\w+)".toRegex()
-
     fun part1(path: String): Long {
         return File(path).bufferedReader().lines()
             .filter { supportsTLS(it) }
@@ -11,18 +9,18 @@ class Day07 {
     }
 
     fun supportsTLS(ip: String): Boolean {
-        var oneOtherContainsABBA = false
+        var oneSupernetContainsABBA = false
         var noHypernetContainsABBA = true
 
         val groups = ip.split("\\[|]".toRegex())
         for ((index, group) in groups.withIndex()) {
             if (index % 2 == 0) {
-                oneOtherContainsABBA = oneOtherContainsABBA || containsABBA(group)
+                oneSupernetContainsABBA = oneSupernetContainsABBA || containsABBA(group)
             } else {
                 noHypernetContainsABBA = noHypernetContainsABBA && !containsABBA(group)
             }
         }
-        return oneOtherContainsABBA && noHypernetContainsABBA
+        return oneSupernetContainsABBA && noHypernetContainsABBA
     }
 
     private fun containsABBA(input: String): Boolean {
