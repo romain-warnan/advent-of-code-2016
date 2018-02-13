@@ -29,16 +29,16 @@ class Day08 {
 
     private fun fromLine(line: String): Operation = when {
         rectRotateRow.matches(line) -> {
-            val groups = rectRotateRow.matchEntire(line)!!.groupValues
-            RotateCol(groups[1].toInt(), groups[2].toInt())
+            val (row, step) = rectRotateRow.matchEntire(line)!!.destructured
+            RotateCol(row.toInt(), step.toInt())
         }
         rectRotateColumn.matches(line) -> {
-            val groups = rectRotateColumn.matchEntire(line)!!.groupValues
-            RotateRow(groups[1].toInt(), groups[2].toInt())
+            val (column, step) = rectRotateColumn.matchEntire(line)!!.destructured
+            RotateRow(column.toInt(), step.toInt())
         }
         else -> {
-            val groups = rectRegex.matchEntire(line)!!.groupValues
-            Rect(groups[1].toInt(), groups[2].toInt())
+            val (width, height) = rectRegex.matchEntire(line)!!.destructured
+            Rect(width.toInt(), height.toInt())
         }
     }
 

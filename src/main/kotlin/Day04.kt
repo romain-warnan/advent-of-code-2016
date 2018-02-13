@@ -26,8 +26,8 @@ class Day04 {
     private fun room(line: String): Room? {
         val matchResult = regex.matchEntire(line)
         if (matchResult != null) {
-            val groupValues = matchResult.groupValues
-            return Room(groupValues[1], groupValues[2].toInt(), groupValues[3])
+            val (encryptedName, sectorID, checksum) = matchResult.destructured
+            return Room(encryptedName, sectorID.toInt(), checksum)
         }
         return null
     }
