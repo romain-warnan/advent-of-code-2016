@@ -4,15 +4,19 @@ class Day09 {
 
     fun part1(input: String): Int {
         var decompressedLength = 0
-        for(indice in input.indices) {
+        var indice = 0
+        while (indice < input.length) {
             if (input[indice] == '(') {
-                val (length, times) = regex.find(input, indice)!!.destructured
-
+                val matchResult = regex.find(input, indice)
+                val (length, times) = matchResult!!.destructured
+                decompressedLength += length.toInt() * times.toInt()
+                indice += matchResult.value.length + length.toInt()
             }
             else {
                 decompressedLength ++
+                indice ++
             }
         }
-        return -1
+        return decompressedLength
     }
 }

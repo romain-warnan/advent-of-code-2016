@@ -11,7 +11,7 @@ class Day09Test {
         val input = File("src/main/resources/input09").bufferedReader().readLine()
         val answer = day.part1(input)
         println("Part 1 : $answer")
-        Assert.assertEquals(0, answer)
+        Assert.assertEquals(120765, answer)
     }
 
     @Test
