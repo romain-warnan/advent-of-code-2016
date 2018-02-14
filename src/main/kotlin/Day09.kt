@@ -19,4 +19,8 @@ class Day09 {
         }
         return decompressedLength
     }
+
+    fun part2(input: String): Int {
+        return -1
+    }
 }
