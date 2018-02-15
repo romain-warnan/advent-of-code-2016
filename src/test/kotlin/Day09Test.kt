@@ -20,7 +20,7 @@ class Day09Test {
         val input = File("src/main/resources/input09").bufferedReader().readLine()
         val answer = day.part2(input)
         println("Part 2 : $answer")
-        Assert.assertEquals(0, answer)
+        Assert.assertEquals(11658395076, answer)
     }
 
     @Test
@@ -56,13 +56,13 @@ class Day09Test {
 
     @Test
     fun test21() {
-        Assert.assertEquals("XYZXYZXYZ".length, day.part2("(3x3)XYZ"))
+        Assert.assertEquals("XYZXYZXYZ".length.toLong(), day.part2("(3x3)XYZ"))
     }
 
 
     @Test
     fun test22() {
-        Assert.assertEquals("XABCABCABCABCABCABCY".length, day.part2("X(8x2)(3x3)ABCY"))
+        Assert.assertEquals("XABCABCABCABCABCABCY".length.toLong(), day.part2("X(8x2)(3x3)ABCY"))
     }
 
 
