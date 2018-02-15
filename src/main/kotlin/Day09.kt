@@ -1,13 +1,13 @@
 class Day09 {
 
-    private val regex = "\\((\\d+)x(\\d+)\\)".toRegex()
+    private val regex1 = "\\((\\d+)x(\\d+)\\)".toRegex()
 
     fun part1(input: String): Long {
         var decompressedLength = 0L
         var indice = 0
         while (indice < input.length) {
             if (input[indice] == '(') {
-                val matchResult = regex.find(input, indice)
+                val matchResult = regex1.find(input, indice)
                 val (length, times) = matchResult!!.destructured
                 decompressedLength += length.toLong() * times.toLong()
                 indice += matchResult.value.length + length.toInt()
@@ -20,26 +20,27 @@ class Day09 {
         return decompressedLength
     }
 
+    private val regex2 = "\\((\\d+)x(\\d+)\\)([A-Z]*)".toRegex()
+
     fun part2(input: String): Long {
         val initialSize = input.indexOf('(').toLong()
         return reduce(initialSize, markers(input))
     }
 
-    private val regexMarker = "\\((\\d+)x(\\d+)\\)([A-Z]*)".toRegex()
 
-    fun marker(input: String): Marker {
-        val match = regexMarker.find(input)!!
+    private fun marker(input: String): Marker {
+        val match = regex2.find(input)!!
         val (length, times, letters) = match.destructured
         return Marker(length.toLong(), times.toLong(), letters.length.toLong(), match.value.length.toLong())
     }
 
-    fun markers(input: String): List<Marker> {
-        return regexMarker.findAll(input)
+    private fun markers(input: String): List<Marker> {
+        return regex2.findAll(input)
             .map { marker(it.value) }
             .toList()
     }
 
-    fun reduce(totalSize: Long, markers: List<Marker>): Long {
+    private fun reduce(totalSize: Long, markers: List<Marker>): Long {
         val marker = markers[0]
         if (markers.size == 1) {
             return totalSize + marker.computedLength()
