@@ -1,3 +1,5 @@
+import java.io.File
+
 class Day10 {
 
     private val bots = HashSet<Bot>()
@@ -5,9 +7,16 @@ class Day10 {
     private var microchip1: Int = -1
     private var microchip2: Int = -1
 
-    fun part1(path: String, microchip1: Int, microchip2: Int): Long {
+    fun part1(path: String, microchip1: Int, microchip2: Int): Int {
         this.microchip1 = microchip1
         this.microchip2 = microchip2
+        val lines = File(path).readLines()
+        try {
+            while (true) lines.forEach { move(it) }
+        }
+        catch (e: BotFoundException) {
+            return e.bot.id
+        }
         return -1
     }
 
@@ -29,38 +38,38 @@ class Day10 {
 
     operator fun Regex.contains(text: CharSequence): Boolean = this.matches(text)
 
-    val regex1 = Regex("value (\\d+) goes to bot (\\d+)")
-    val regex2 = Regex("bot (\\d+) gives low to bot (\\d+) and high to bot (\\d+)")
-    val regex3 = Regex("bot (\\d+) gives low to output (\\d+) and high to bot (\\d+)")
-    val regex4 = Regex("bot (\\d+) gives low to bot (\\d+) and high to output (\\d+)")
-    val regex5 = Regex("bot (\\d+) gives low to output (\\d+) and high to output (\\d+)")
+    private val regex1 = Regex("value (\\d+) goes to bot (\\d+)")
+    private val regex2 = Regex("bot (\\d+) gives low to bot (\\d+) and high to bot (\\d+)")
+    private val regex3 = Regex("bot (\\d+) gives low to output (\\d+) and high to bot (\\d+)")
+    private val regex4 = Regex("bot (\\d+) gives low to bot (\\d+) and high to output (\\d+)")
+    private val regex5 = Regex("bot (\\d+) gives low to output (\\d+) and high to output (\\d+)")
 
-    fun romain(line: String) {
+    private fun move(line: String) {
         when(line) {
             in regex1 -> {
                 val (value, id) = regex1.matchEntire(line)!!.destructured
                 bot(id).receive(value.toInt())
             }
             in regex2 -> {
-                val (idBot, idLow, idHigh) = regex1.matchEntire(line)!!.destructured
+                val (idBot, idLow, idHigh) = regex2.matchEntire(line)!!.destructured
                 val low = bot(idLow)
                 val high = bot(idHigh)
                 bot(idBot).give(low, high)
             }
             in regex3 -> {
-                val (idBot, idLow, idHigh) = regex1.matchEntire(line)!!.destructured
+                val (idBot, idLow, idHigh) = regex3.matchEntire(line)!!.destructured
                 val low = output(idLow)
                 val high = bot(idHigh)
                 bot(idBot).give(low, high)
             }
             in regex4 -> {
-                val (idBot, idLow, idHigh) = regex1.matchEntire(line)!!.destructured
+                val (idBot, idLow, idHigh) = regex4.matchEntire(line)!!.destructured
                 val low = bot(idLow)
                 val high = output(idHigh)
                 bot(idBot).give(low, high)
             }
-            in regex4 -> {
-                val (idBot, idLow, idHigh) = regex1.matchEntire(line)!!.destructured
+            in regex5 -> {
+                val (idBot, idLow, idHigh) = regex5.matchEntire(line)!!.destructured
                 val low = output(idLow)
                 val high = output(idHigh)
                 bot(idBot).give(low, high)
@@ -81,22 +90,24 @@ class Day10 {
 
     class BotFoundException(val bot: Bot): Exception(bot.id.toString())
 
-    data class Bot(val id: Int = -1, val microchip1: Int, val microchip2: Int): Receiver {
+    data class Bot(val id: Int = -1, private val microchip1: Int, private val microchip2: Int): Receiver {
 
-        private val microchips = ArrayList<Int>()
+        private val microchips = HashSet<Int>()
 
-        override fun receive(microchip: Int) = microchips.add(microchip)
+        override fun receive(microchip: Int): Boolean {
+            microchips.add(microchip)
+            if (microchip1 in microchips && microchip2 in microchips) {
+                throw BotFoundException(this)
+            }
+            return true
+        }
 
-        fun give(low: Receiver, high: Receiver): Int {
+        fun give(low: Receiver, high: Receiver) {
             if (microchips.size == 2) {
                 giveLow(low)
                 giveHigh(high)
                 microchips.clear()
-                if (microchip1 in microchips && microchip2 in microchips) {
-                    throw BotFoundException(this)
-                }
             }
-            return -1
         }
 
         private fun giveLow(receiver: Receiver) {
