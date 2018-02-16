@@ -60,7 +60,6 @@ class Day09 {
     }
 
     data class Marker (val length: Long, var times: Long, val letters: Long, val size: Long) {
-
         fun computedLength() = when (letters) {
             0L -> 0
             else -> times * length + letters - length
