@@ -22,10 +22,11 @@ class Day10 {
 
     fun part2(path: String): Int {
         val lines = File(path).readLines()
+        // optimal avec repeat(26)
         repeat(50) {
             lines.forEach { move(it) }
         }
-        return output(0).chip * output(1).chip * output(2).chip
+        return (0..2).map { output(it).chip }.reduce { a, b -> a * b }
     }
 
     private fun bot(id: Int): Bot {
