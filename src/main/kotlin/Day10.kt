@@ -1,15 +1,16 @@
+
 import java.io.File
 
 class Day10 {
 
     private val bots = HashSet<Bot>()
     private val outputs = HashSet<Output>()
-    private var microchip1: Int = -1
-    private var microchip2: Int = -1
+    private var chip1: Int = -1
+    private var chip2: Int = -1
 
-    fun part1(path: String, microchip1: Int, microchip2: Int): Int {
-        this.microchip1 = microchip1
-        this.microchip2 = microchip2
+    fun part1(path: String, chip1: Int = -1, chip2: Int = -2): Int {
+        this.chip1 = chip1
+        this.chip2 = chip2
         val lines = File(path).readLines()
         try {
             while (true) lines.forEach { move(it) }
@@ -17,11 +18,18 @@ class Day10 {
         catch (e: BotFoundException) {
             return e.bot.id
         }
-        return -1
+    }
+
+    fun part2(path: String): Int {
+        val lines = File(path).readLines()
+        repeat(50) {
+            lines.forEach { move(it) }
+        }
+        return output(0).chip * output(1).chip * output(2).chip
     }
 
     private fun bot(id: Int): Bot {
-        val bot = bots.find { it.id == id } ?: Bot(id, microchip1, microchip2)
+        val bot = bots.find { it.id == id } ?: Bot(id, chip1, chip2)
         bots.add(bot)
         return bot
     }
@@ -78,44 +86,45 @@ class Day10 {
     }
 
     interface Receiver {
-        fun receive(microchip: Int): Boolean
+        fun receive(chip: Int)
     }
 
     data class Output(val id: Int = -1): Receiver {
 
-        private val microchips = ArrayList<Int>()
+        var chip = -1
 
-        override fun receive(microchip: Int) = microchips.add(microchip)
+        override fun receive(chip: Int) {
+            this.chip = chip
+        }
     }
 
     class BotFoundException(val bot: Bot): Exception(bot.id.toString())
 
-    data class Bot(val id: Int = -1, private val microchip1: Int, private val microchip2: Int): Receiver {
+    data class Bot(val id: Int = -1, private val chip1: Int, private val chip2: Int): Receiver {
 
-        private val microchips = HashSet<Int>()
+        private val chips = HashSet<Int>()
 
-        override fun receive(microchip: Int): Boolean {
-            microchips.add(microchip)
-            if (microchip1 in microchips && microchip2 in microchips) {
+        override fun receive(chip: Int) {
+            chips.add(chip)
+            if (chip1 in chips && chip2 in chips) {
                 throw BotFoundException(this)
             }
-            return true
         }
 
         fun give(low: Receiver, high: Receiver) {
-            if (microchips.size == 2) {
+            if (chips.size == 2) {
                 giveLow(low)
                 giveHigh(high)
-                microchips.clear()
+                chips.clear()
             }
         }
 
         private fun giveLow(receiver: Receiver) {
-             receiver.receive(microchips.min()!!)
+             receiver.receive(chips.min()!!)
         }
 
         private fun giveHigh(receiver: Receiver) {
-            receiver.receive(microchips.max()!!)
+            receiver.receive(chips.max()!!)
         }
     }
 }
