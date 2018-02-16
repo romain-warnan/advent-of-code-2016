@@ -24,7 +24,7 @@ class Day09 {
 
     fun part2(input: String): Long {
         val initialSize = input.indexOf('(').toLong()
-        return reduce(initialSize, markers(input))
+        return initialSize + reduce(markers(input))
     }
 
 
@@ -40,24 +40,23 @@ class Day09 {
             .toList()
     }
 
-    private fun reduce(totalSize: Long, markers: List<Marker>): Long {
-        val marker = markers[0]
-        if (markers.size == 1) {
-            return totalSize + marker.computedLength()
-        }
-        if(marker.length <= marker.letters) {
-            return reduce(totalSize + marker.computedLength(), markers.drop(1))
-        }
-        var n = marker.letters
-        var i = 1
-        while (n < marker.length) {
-            if (markers[i].letters > 0) {
-                markers[i].times *= marker.times
+    private fun reduce(markers: List<Marker>): Long {
+        var totalSize = 0L
+        for ((index, marker) in markers.withIndex()) {
+            if(marker.length > marker.letters) {
+                var n = marker.letters
+                var i = index + 1
+                while (n < marker.length) {
+                    if (markers[i].letters > 0) {
+                        markers[i].times *= marker.times
+                    }
+                    n += markers[i].size
+                    i ++
+                }
             }
-            n += markers[i].size
-            i ++
+            totalSize += marker.computedLength()
         }
-        return reduce(totalSize + marker.computedLength(), markers.drop(1))
+        return totalSize
     }
 
     data class Marker (val length: Long, var times: Long, val letters: Long, val size: Long) {
