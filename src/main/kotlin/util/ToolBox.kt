@@ -1,5 +1,9 @@
 package util
 
+import java.util.*
+
+
+fun ClosedRange<Int>.random() = Random().nextInt(endInclusive - start) +  start
 
 class Memoize<in T, out R>(private val f: (T) -> R) : (T) -> R {
     private val values = mutableMapOf<T, R>()

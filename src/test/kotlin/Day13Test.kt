@@ -16,6 +16,6 @@ class Day13Test {
 
     @Test
     fun test1() {
-         Assert.assertEquals(11, day.part1(10, Point(7, 3)))
+         Assert.assertEquals(11, day.part1(10, Point(7, 4)))
     }
 }
