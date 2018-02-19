@@ -16,6 +16,18 @@ class Day12 {
         return registry["a"]
     }
 
+    fun part2(path: String): Int {
+        val instructions = File(path).readLines()
+                .map { instruction(it) }
+                .toList()
+        registry["c"] = 1
+        while (registry.current in instructions.indices) {
+            instructions[registry.current].apply()
+        }
+
+        return registry["a"]
+    }
+
     private fun instruction(line: String) = instruction(line.split(" "))
 
     private fun instruction(tokens: List<String>) = when (tokens[0]) {
