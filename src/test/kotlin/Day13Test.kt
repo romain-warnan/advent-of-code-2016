@@ -11,7 +11,7 @@ class Day13Test {
     fun part1() {
         val answer = day.part1(1362, Point(31, 39))
         println("Part 1 : $answer")
-        Assert.assertEquals(0, answer)
+        Assert.assertEquals(82, answer)
     }
 
     @Test
