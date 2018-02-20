@@ -4,22 +4,22 @@ import util.random
 class Day13 {
 
     fun part1(favoriteNumber: Int, targetPoint: Point): Int {
-        val maze = Maze(favoriteNumber, targetPoint)
-        // maze.print()
-        return maze.minPathLength()
+        val maze = Maze(favoriteNumber)
+        // maze.print(targetPoint)
+        return maze.minPathLength(targetPoint)
     }
 
-    inner class Maze(private val favoriteNumber: Int, private val targetPoint: Point) {
+    inner class Maze(private val favoriteNumber: Int) {
 
-        fun minPathLength(): Int {
+        fun minPathLength(targetPoint: Point): Int {
             val lengths = mutableSetOf<Int>()
             repeat(100) {
-                lengths.add(pathLength())
+                lengths.add(pathLength(targetPoint))
             }
             return lengths.min() ?: -1
         }
 
-        private fun pathLength(): Int {
+        private fun pathLength(targetPoint: Point): Int {
             val startPoint = Point(1, 1)
             var point = Point(targetPoint.x, targetPoint.y)
             val path = mutableListOf(point)
@@ -78,7 +78,7 @@ class Day13 {
                 .rem(2) == 0
         }
 
-        fun print() {
+        fun print(targetPoint: Point) {
             for (y in 0..targetPoint.y + 2) {
                 for (x in 0..targetPoint.x + 2) {
                     val point = Point(x, y)
