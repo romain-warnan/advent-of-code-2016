@@ -4,22 +4,50 @@ import util.random
 class Day13 {
 
     fun part1(favoriteNumber: Int, targetPoint: Point): Int {
-        val maze = Maze(favoriteNumber, targetPoint)
-        // maze.print()
-        return maze.minPathLength()
+        val maze = Maze(favoriteNumber)
+        // maze.print(targetPoint)
+        return maze.minPathLength(targetPoint)
     }
 
-    inner class Maze(private val favoriteNumber: Int, private val targetPoint: Point) {
+    fun part2(favoriteNumber: Int, maxSteps: Int): Int {
+        val maze = Maze(favoriteNumber)
+        return maze.distinctPoints(maxSteps)
+    }
 
-        fun minPathLength(): Int {
+    inner class Maze(private val favoriteNumber: Int) {
+
+        fun distinctPoints(maxSteps: Int): Int {
+            val points = setOf(Point(1, 1))
+            val all = mutableSetOf(Point(1, 1))
+            return allPoints(points, 0, maxSteps, all).size
+        }
+
+        private fun allPoints(points: Set<Point>, step: Int, maxSteps: Int, all: MutableSet<Point>): Set<Point> {
+            all.addAll(points)
+            if (step == maxSteps) {
+                return all
+            }
+            return allPoints(points.flatMap { nextPoints(it) }.toSet(), step + 1, maxSteps, all)
+        }
+
+        private fun nextPoints(point: Point): Set<Point> {
+            return setOf(
+                Point(point.x + 1, point.y),
+                Point(point.x, point.y + 1),
+                Point(point.x - 1, point.y),
+                Point(point.x, point.y - 1)
+            ).filter { isInRange(it) }.toSet()
+        }
+
+        fun minPathLength(targetPoint: Point): Int {
             val lengths = mutableSetOf<Int>()
             repeat(100) {
-                lengths.add(pathLength())
+                lengths.add(pathLength(targetPoint))
             }
             return lengths.min() ?: -1
         }
 
-        private fun pathLength(): Int {
+        private fun pathLength(targetPoint: Point): Int {
             val startPoint = Point(1, 1)
             var point = Point(targetPoint.x, targetPoint.y)
             val path = mutableListOf(point)
@@ -53,10 +81,15 @@ class Day13 {
             else    -> Point(point.x, point.y - 1)
         }
 
-        private fun isValid(point: Point, path: List<Point>, deadEnds: Set<Point>) = when {
+        private fun isInRange(point: Point) = when {
             point.x < 0 -> false
             point.y < 0 -> false
             isWall(point) -> false
+            else -> true
+        }
+
+        private fun isValid(point: Point, path: List<Point>, deadEnds: Set<Point>) = when {
+            !isInRange(point) -> false
             point in path -> false
             point in deadEnds -> false
             else -> true
@@ -78,7 +111,7 @@ class Day13 {
                 .rem(2) == 0
         }
 
-        fun print() {
+        fun print(targetPoint: Point) {
             for (y in 0..targetPoint.y + 2) {
                 for (x in 0..targetPoint.x + 2) {
                     val point = Point(x, y)
