@@ -16,6 +16,20 @@ class Day14 {
         return keyIndexes[numberOfKeys - 1]
     }
 
+    fun part2(salt: String, numberOfKeys: Int = 64): Int {
+        var index = 0
+        val candidates = mutableMapOf<Int, Char>()
+        val keyIndexes = mutableListOf<Int>()
+        while (keyIndexes.size < numberOfKeys) {
+            val hash = stretchKey(salt + index)
+            removeRejectedCandidates(candidates, index)
+            keyIndexes.addAll(nextKeyIndexes(hash, candidates))
+            candidateFor(hash)?.let { candidates[index] = it }
+            index ++
+        }
+        return keyIndexes[numberOfKeys - 1]
+    }
+
     private fun candidateFor(hash: String): Char? {
         for(i in 0..hash.lastIndex - 2){
             val c = hash[i]
@@ -36,4 +50,12 @@ class Day14 {
         .keys
         .filter { index - it >= 1_000 }
         .forEach { candidates.remove(it) }
+
+    private fun stretchKey(input: String): String {
+        var hash = input
+        repeat(2017) {
+            hash = DigestUtils.md5Hex(hash)
+        }
+        return hash
+    }
 }
