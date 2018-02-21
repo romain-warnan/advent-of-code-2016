@@ -39,7 +39,7 @@ class Day12 {
 
     fun eval(expr: String) = when {
         Regex("-?[0-9]+").matches(expr) -> expr.toInt()
-        else -> registry[expr]!!
+        else -> registry[expr]
     }
 
     interface Instruction {
