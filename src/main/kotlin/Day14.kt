@@ -1,0 +1,37 @@
+import org.apache.commons.codec.digest.DigestUtils
+
+class Day14 {
+
+    fun part1(salt: String, numberOfKeys: Int = 64): Int {
+        var index = 0
+        val candidates = mutableMapOf<Int, Char>()
+        val keyIndexes = mutableListOf<Int>()
+        while (keyIndexes.size < numberOfKeys) {
+            val hash = DigestUtils.md5Hex(salt + index)
+            keyIndexes.addAll(nextKeyIndexes(hash, index, candidates))
+            candidateFor(hash)?.let { candidates[index] = it }
+            index ++
+        }
+        return keyIndexes[numberOfKeys - 1]
+    }
+
+    private fun candidateFor(hash: String): Char? {
+        for(i in 0..hash.lastIndex - 2){
+            val c = hash[i]
+            if (c == hash[i + 1] && c == hash[i + 2]) return c
+        }
+        return null
+    }
+
+    private fun isValidKey(hash: String, c: Char) = hash.contains(c.toString().repeat(5))
+
+    private fun nextKeyIndexes(hash: String, index: Int, candidates: MutableMap<Int, Char>): List<Int> {
+        val keysToRemove = candidates.keys.filter { index - it >= 1_000 }
+        keysToRemove.forEach { candidates.remove(it) }
+        return candidates
+            .filterValues { isValidKey(hash, it) }
+            .toSortedMap()
+            .keys
+            .toList()
+    }
+}
