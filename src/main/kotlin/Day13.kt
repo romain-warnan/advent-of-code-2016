@@ -18,16 +18,16 @@ class Day13 {
 
         fun distinctPoints(maxSteps: Int): Int {
             val points = setOf(Point(1, 1))
-            val all = mutableSetOf(Point(1, 1))
-            return allPoints(points, 0, maxSteps, all).size
+            val history = mutableSetOf(Point(1, 1))
+            explore(points, 0, maxSteps, history)
+            return history.size
         }
 
-        private fun allPoints(points: Set<Point>, step: Int, maxSteps: Int, all: MutableSet<Point>): Set<Point> {
-            all.addAll(points)
-            if (step == maxSteps) {
-                return all
+        private fun explore(points: Set<Point>, step: Int, maxSteps: Int, history: MutableSet<Point>) {
+            history.addAll(points)
+            if (step < maxSteps) {
+                explore(points.flatMap { nextPoints(it) }.toSet(), step + 1, maxSteps, history)
             }
-            return allPoints(points.flatMap { nextPoints(it) }.toSet(), step + 1, maxSteps, all)
         }
 
         private fun nextPoints(point: Point): Set<Point> {
