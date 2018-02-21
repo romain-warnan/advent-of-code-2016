@@ -8,7 +8,8 @@ class Day14 {
         val keyIndexes = mutableListOf<Int>()
         while (keyIndexes.size < numberOfKeys) {
             val hash = DigestUtils.md5Hex(salt + index)
-            keyIndexes.addAll(nextKeyIndexes(hash, index, candidates))
+            removeRejectedCandidates(candidates, index)
+            keyIndexes.addAll(nextKeyIndexes(hash, candidates))
             candidateFor(hash)?.let { candidates[index] = it }
             index ++
         }
@@ -25,13 +26,14 @@ class Day14 {
 
     private fun isValidKey(hash: String, c: Char) = hash.contains(c.toString().repeat(5))
 
-    private fun nextKeyIndexes(hash: String, index: Int, candidates: MutableMap<Int, Char>): List<Int> {
-        val keysToRemove = candidates.keys.filter { index - it >= 1_000 }
-        keysToRemove.forEach { candidates.remove(it) }
-        return candidates
-            .filterValues { isValidKey(hash, it) }
-            .toSortedMap()
-            .keys
-            .toList()
-    }
+    private fun nextKeyIndexes(hash: String, candidates: MutableMap<Int, Char>) = candidates
+        .filterValues { isValidKey(hash, it) }
+        .toSortedMap()
+        .keys
+        .toList()
+
+    private fun removeRejectedCandidates(candidates: MutableMap<Int, Char>, index: Int) = candidates
+        .keys
+        .filter { index - it >= 1_000 }
+        .forEach { candidates.remove(it) }
 }
