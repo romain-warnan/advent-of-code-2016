@@ -12,17 +12,22 @@ class Day14 {
 
     private fun findKeys(salt: String, numberOfKeys: Int, hashFunction: (String) -> String): Int {
         var index = 0
-        val candidates = mutableMapOf<Int, Char>()
+
+        val nextHashes = (1..1000).map { hashFunction(salt + it) }.toMutableList()
+
         val keyIndexes = mutableListOf<Int>()
         while (keyIndexes.size < numberOfKeys) {
-            removeRejectedCandidates(candidates, index)
             val hash = hashFunction(salt + index)
-            val elements = nextKeyIndexes(hash, candidates)
-            keyIndexes.addAll(elements)
-            candidateFor(hash)?.let { candidates[index] = it }
+            candidateFor(hash)?.let {
+                nextHashes.find { hash -> isValidKey(hash, it) }?.let {
+                    keyIndexes.add(index)
+                }
+            }
             index ++
+            nextHashes.removeAt(0)
+            nextHashes.add(hashFunction(salt + (1000 + index)))
         }
-        return keyIndexes[numberOfKeys - 1]
+        return keyIndexes.last()
     }
 
     private fun candidateFor(hash: String): Char? {
@@ -34,17 +39,6 @@ class Day14 {
     }
 
     private fun isValidKey(hash: String, c: Char) = hash.contains(c.toString().repeat(5))
-
-    private fun nextKeyIndexes(hash: String, candidates: Map<Int, Char>) = candidates
-        .filterValues { isValidKey(hash, it) }
-        .toSortedMap()
-        .keys
-        .toList()
-
-    private fun removeRejectedCandidates(candidates: MutableMap<Int, Char>, index: Int) = candidates
-        .keys
-        .filter { index - it >= 1_000 }
-        .forEach { candidates.remove(it) }
 
     private fun simpleHash(input: String) = DigestUtils.md5Hex(input)
 

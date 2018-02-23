@@ -1,4 +1,5 @@
 import org.junit.Assert
+import org.junit.Ignore
 import org.junit.Test
 
 class Day12Test {
@@ -13,6 +14,7 @@ class Day12Test {
     }
 
     @Test
+    @Ignore
     fun part2() {
         val answer = day.part2("src/main/resources/input12")
         println("Part 2 : $answer")
