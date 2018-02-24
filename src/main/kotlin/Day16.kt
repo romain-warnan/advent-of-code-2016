@@ -1,8 +1,12 @@
 class Day16 {
 
     fun part1(state: String, diskLength: Int = 272): String {
-
-        return "zélie"
+        var nextState = state
+        while (nextState.length < diskLength) {
+            nextState = nextState(nextState)
+        }
+        nextState = nextState.take(diskLength)
+        return checksum(nextState)
     }
 
     fun nextState(state: String) = state + "0" + state
