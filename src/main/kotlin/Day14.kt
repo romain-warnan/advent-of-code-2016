@@ -13,18 +13,17 @@ class Day14 {
     private fun findKeys(salt: String, numberOfKeys: Int, hashFunction: (String) -> String): Int {
         var index = 0
 
-        val nextHashes = (1..1000).map { hashFunction(salt + it) }.toMutableList()
+        val nextHashes = (0..1000).map { hashFunction(salt + it) }.toMutableList()
 
         val keyIndexes = mutableListOf<Int>()
         while (keyIndexes.size < numberOfKeys) {
-            val hash = hashFunction(salt + index)
+            val hash = nextHashes.removeAt(0)
             candidateFor(hash)?.let {
                 nextHashes.find { hash -> isValidKey(hash, it) }?.let {
                     keyIndexes.add(index)
                 }
             }
             index ++
-            nextHashes.removeAt(0)
             nextHashes.add(hashFunction(salt + (1000 + index)))
         }
         return keyIndexes.last()
