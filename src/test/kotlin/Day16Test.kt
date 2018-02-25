@@ -14,6 +14,13 @@ class Day16Test {
     }
 
     @Test
+    fun part2() {
+        val answer = day.part2("10010000000110000")
+        println("Part 2 : $answer")
+        Assert.assertEquals("0", answer)
+    }
+
+    @Test
     fun test1() {
          Assert.assertEquals("01100", day.part1("10000", 20))
     }
