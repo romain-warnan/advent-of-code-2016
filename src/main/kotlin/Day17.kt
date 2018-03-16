@@ -1,16 +1,28 @@
+
 import org.apache.commons.codec.digest.DigestUtils
+import util.random
 
 class Day17 {
 
     fun part1(passcode: String): String {
-        val path = mutableListOf<Way>();
 
-        val point = Point()
-        if(point.onExit()) {
-            return path.joinToString("");
+        val paths = mutableSetOf<String>()
+        repeat(1_000_000) {
+            val path = mutableListOf<Way>();
+            val point = Point()
+            var blocked = false;
+            while (!point.onExit()) {
+                val ways = point.possibleMoves(hash(passcode, path))
+                if (ways.isEmpty()) {
+                    blocked = true;
+                    break;
+                }
+                val index = (0..ways.size).random()
+                point.move(ways[index], path);
+            }
+            if(!blocked) paths.add(path.joinToString(""))
         }
-        //        point.possibleMoves(hash(passcode, path))
-        return "";
+        return paths.minBy { it.length }.orEmpty()
     }
 
     enum class Way {
@@ -21,6 +33,8 @@ class Day17 {
 
     data class Point(var row: Int = 0, var col: Int = 0) {
         private val openRegex = Regex("[b-f]")
+
+        fun clone() = Point(row, col)
 
         fun canMove(way: Way, hash: String) = when(way) {
             Way.U -> if (row == 0) { false } else { openRegex.matches(hash[0].toString()) }
