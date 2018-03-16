@@ -3,9 +3,14 @@ import org.apache.commons.codec.digest.DigestUtils
 class Day17 {
 
     fun part1(passcode: String): String {
-        val path = arrayListOf<Way>();
-        println(hash(passcode, path))
-        return path.joinToString("");
+        val path = mutableListOf<Way>();
+
+        val point = Point()
+        if(point.onExit()) {
+            return path.joinToString("");
+        }
+        //        point.possibleMoves(hash(passcode, path))
+        return "";
     }
 
     enum class Way {
@@ -23,5 +28,19 @@ class Day17 {
             Way.L -> if (col == 0) { false } else { openRegex.matches(hash[2].toString()) }
             Way.R -> if (col == 3) { false } else { openRegex.matches(hash[3].toString()) }
         }
+
+        fun possibleMoves(hash: String) = Way.values().filter { canMove(it, hash) }
+
+        fun move(way: Way, path: MutableList<Way>) {
+            path.add(way)
+            when (way) {
+                Way.U -> row--
+                Way.D -> row++
+                Way.L -> col--
+                Way.R -> col++
+            }
+        }
+
+        fun onExit() = row == 3 && col == 3
     }
 }
