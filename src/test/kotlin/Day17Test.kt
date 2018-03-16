@@ -13,17 +13,17 @@ class Day17Test {
     }
 
     @Test
-    fun test1() {
+    fun test11() {
          Assert.assertEquals("DDRRRD", day.part1("ihgpwlah"))
     }
 
     @Test
-    fun checksum() {
+    fun test12() {
         Assert.assertEquals("DDUDRLRRUDRD", day.part1("kglvqrro"))
     }
 
     @Test
-    fun nextState1() {
+    fun test13() {
         Assert.assertEquals("DRURDRUDDLLDLUURRDULRLDUUDDDRR", day.part1("ulqzkmiv"))
     }
 }
