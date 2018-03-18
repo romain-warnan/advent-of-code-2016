@@ -3,10 +3,20 @@ import org.apache.commons.codec.digest.DigestUtils
 class Day17 {
 
     fun part1(passcode: String): String {
+        val paths = paths(passcode)
+        return paths.sortedBy { it.length }.first()
+    }
+
+    fun part2(passcode: String): Int {
+        val paths = paths(passcode)
+        return paths.sortedBy { it.length }.last().length
+    }
+
+    private fun paths(passcode: String): MutableSet<String> {
         val paths = mutableSetOf<String>()
         val step = Step()
         nextStep(step, passcode, paths)
-        return paths.sortedBy { it.length }.first()
+        return paths
     }
 
     private fun nextStep(step: Step, passcode: String, paths: MutableSet<String>) {
