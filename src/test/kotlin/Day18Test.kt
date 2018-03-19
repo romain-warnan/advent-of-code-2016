@@ -7,13 +7,20 @@ class Day18Test {
 
     @Test
     fun part1() {
-        val answer = day.part1("src/main/resources/input18", 40)
+        val answer = day.countSafe("src/main/resources/input18", 40)
         println("Part 1 : $answer")
         Assert.assertEquals(2013, answer)
     }
 
     @Test
+    fun part2() {
+        val answer = day.countSafe("src/main/resources/input18", 400_000)
+        println("Part 2 : $answer")
+        Assert.assertEquals(20006289, answer)
+    }
+
+    @Test
     fun test1() {
-         Assert.assertEquals(38, day.part1("src/test/resources/input18", 10))
+         Assert.assertEquals(38, day.countSafe("src/test/resources/input18", 10))
     }
 }
