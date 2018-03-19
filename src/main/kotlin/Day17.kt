@@ -5,38 +5,49 @@ import util.random
 class Day17 {
 
     fun part1(passcode: String): String {
+        val paths = paths(passcode)
+        return paths.sortedBy { it.length }.first()
+    }
 
+    fun part2(passcode: String): Int {
+        val paths = paths(passcode)
+        return paths.sortedBy { it.length }.last().length
+    }
+
+    private fun paths(passcode: String): MutableSet<String> {
         val paths = mutableSetOf<String>()
-        repeat(1_000_000) {
-            val path = mutableListOf<Way>();
-            val point = Point()
-            var blocked = false;
-            while (!point.onExit()) {
-                val ways = point.possibleMoves(hash(passcode, path))
-                if (ways.isEmpty()) {
-                    blocked = true;
-                    break;
-                }
-                val index = (0..ways.size).random()
-                point.move(ways[index], path);
-            }
-            if(!blocked) paths.add(path.joinToString(""))
+        val step = Step()
+        nextStep(step, passcode, paths)
+        return paths
+    }
+
+    private fun nextStep(step: Step, passcode: String, paths: MutableSet<String>) {
+        for (way in step.point.possibleMoves(hash(passcode, step.path))) {
+            val nextStep = step.next(way)
+            if (nextStep.onExit())  paths.add(nextStep.path.joinToString(separator = ""))
+            else(nextStep(nextStep, passcode, paths))
         }
-        return paths.minBy { it.length }.orEmpty()
     }
 
     enum class Way {
         U, R, D, L
     }
 
-    fun hash(passcode: String, path: List<Way>) = DigestUtils.md5Hex(path.joinToString(prefix = passcode, separator = ""));
+    operator fun Way.unaryMinus() = when(this) {
+        Way.U -> Way.D
+        Way.D -> Way.U
+        Way.L -> Way.R
+        Way.R -> Way.L
+    }
+
+    private fun hash(passcode: String, path: List<Way>) = DigestUtils.md5Hex(path.joinToString(prefix = passcode, separator = ""))
+
+
 
     data class Point(var row: Int = 0, var col: Int = 0) {
         private val openRegex = Regex("[b-f]")
 
-        fun clone() = Point(row, col)
-
-        fun canMove(way: Way, hash: String) = when(way) {
+        private fun canMove(way: Way, hash: String) = when(way) {
             Way.U -> if (row == 0) { false } else { openRegex.matches(hash[0].toString()) }
             Way.D -> if (row == 3) { false } else { openRegex.matches(hash[1].toString()) }
             Way.L -> if (col == 0) { false } else { openRegex.matches(hash[2].toString()) }
@@ -45,16 +56,24 @@ class Day17 {
 
         fun possibleMoves(hash: String) = Way.values().filter { canMove(it, hash) }
 
-        fun move(way: Way, path: MutableList<Way>) {
-            path.add(way)
-            when (way) {
-                Way.U -> row--
-                Way.D -> row++
-                Way.L -> col--
-                Way.R -> col++
-            }
+    }
+
+    data class Step(var path: List<Way> = mutableListOf(), var point: Point =  Point()) {
+
+        private fun move(way: Way, point: Point) = when (way) {
+            Way.U -> Point(point.row - 1, point.col)
+            Way.D -> Point(point.row + 1, point.col)
+            Way.L -> Point(point.row, point.col - 1)
+            Way.R -> Point(point.row, point.col + 1)
         }
 
-        fun onExit() = row == 3 && col == 3
+        fun next (way: Way): Step {
+            val nextPath = path.toMutableList()
+            nextPath.add(way)
+            val nextPoint = move(way, point)
+            return Step(nextPath, nextPoint)
+        }
+
+        fun onExit() = point.row == 3 && point.col == 3
     }
 }
