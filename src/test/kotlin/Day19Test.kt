@@ -1,4 +1,5 @@
 import org.junit.Assert
+import org.junit.Ignore
 import org.junit.Test
 
 class Day19Test {
@@ -13,6 +14,7 @@ class Day19Test {
     }
 
     @Test
+    @Ignore
     fun part2() {
         val answer = day.part2(3018458)
         println("Part 2 : $answer")
@@ -28,7 +30,6 @@ class Day19Test {
     fun test21() {
         Assert.assertEquals(2, day.part2(5))
     }
-
 
     @Test
     fun test22() {
