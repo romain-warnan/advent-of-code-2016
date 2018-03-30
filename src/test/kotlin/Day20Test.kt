@@ -1,5 +1,6 @@
 import org.junit.Assert
 import org.junit.Test
+import java.math.BigInteger
 
 class Day20Test {
 
@@ -7,13 +8,13 @@ class Day20Test {
 
     @Test
     fun part1() {
-        val answer = day.part1("src/main/resources/input18")
+        val answer = day.part1("src/main/resources/input20")
         println("Part 1 : $answer")
-        Assert.assertEquals(-1, answer)
+        Assert.assertEquals(BigInteger.valueOf(4793564), answer)
     }
 
     @Test
     fun test1() {
-         Assert.assertEquals(3, day.part1("src/test/resources/input20"))
+         Assert.assertEquals(BigInteger.valueOf(3), day.part1("src/test/resources/input20"))
     }
 }
