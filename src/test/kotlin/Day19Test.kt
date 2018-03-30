@@ -16,7 +16,7 @@ class Day19Test {
     fun part2() {
         val answer = day.part2(3018458)
         println("Part 2 : $answer")
-        Assert.assertEquals(26735, answer)
+        Assert.assertEquals(1424135, answer)
     }
 
     @Test
@@ -25,7 +25,13 @@ class Day19Test {
     }
 
     @Test
-    fun test2() {
+    fun test21() {
         Assert.assertEquals(2, day.part2(5))
+    }
+
+
+    @Test
+    fun test22() {
+        Assert.assertEquals(4, day.part2(13))
     }
 }

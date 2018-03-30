@@ -21,13 +21,13 @@ class Day19 {
         while(elfs.size > 1) {
             val oppositeIndex = oppositeIndex(index, elfs)
             elfs.removeAt(oppositeIndex)
-            index ++
-            if(index >= elfs.size) index = 0
+            if (index < oppositeIndex) index ++
+            index %= elfs.size
         }
         return elfs.first()
     }
 
-    private fun oppositeIndex(index: Int, elfs: MutableList<Int>) = index + (elfs.size / 2) % elfs.size
+    private fun oppositeIndex(index: Int, elfs: MutableList<Int>) = (index + (elfs.size / 2)) % elfs.size
 
     private fun Int.isEven() = this % 2 == 0
 }
