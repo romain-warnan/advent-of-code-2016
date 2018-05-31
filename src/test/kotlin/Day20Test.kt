@@ -14,7 +14,19 @@ class Day20Test {
     }
 
     @Test
+    fun part2() {
+        val answer = day.part2("src/main/resources/input20", BigInteger.valueOf(4294967295))
+        println("Part 2 : $answer")
+        Assert.assertEquals(BigInteger.valueOf(146), answer)
+    }
+
+    @Test
     fun test1() {
          Assert.assertEquals(BigInteger.valueOf(3), day.part1("src/test/resources/input20"))
+    }
+
+    @Test
+    fun test2() {
+        Assert.assertEquals(BigInteger.valueOf(2), day.part2("src/test/resources/input20", BigInteger.valueOf(9)))
     }
 }
