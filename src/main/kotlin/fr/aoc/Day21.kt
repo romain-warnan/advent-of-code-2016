@@ -6,14 +6,10 @@ class Day21 {
 
     fun part1(path: String, input: String): String {
         var password = input
-        println(password)
         File(path)
             .readLines()
             .map { operationFromLine(it) }
-            .forEach {
-                password = it.apply(password)
-                println(password)
-            }
+            .forEach { password = it.apply(password) }
         return password
     }
 
