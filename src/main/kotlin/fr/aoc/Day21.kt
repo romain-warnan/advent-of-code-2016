@@ -5,11 +5,13 @@ import java.io.File
 class Day21 {
 
     fun part1(path: String, input: String): String {
+        val operations = File(path).readLines().map { operationFromLine(it) }
+        return scramble(input, operations)
+    }
+
+    private fun scramble(input: String, operations: List<Operation>): String {
         var password = input
-        File(path)
-            .readLines()
-            .map { operationFromLine(it) }
-            .forEach { password = it.apply(password) }
+        operations.forEach { password = it.apply(password) }
         return password
     }
 
