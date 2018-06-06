@@ -9,6 +9,17 @@ class Day21 {
         return scramble(input, operations)
     }
 
+    fun part2(path: String, scrambled: String): String {
+        val operations = File(path).readLines().map { operationFromLine(it) }
+        var letters = scrambled
+        while (scramble(letters, operations) != scrambled) {
+            letters = nextCombination(letters)
+        }
+        return letters
+    }
+
+    private fun nextCombination(letters: String) = letters.toCharArray().toMutableList().shuffled().joinToString(separator = "")
+
     private fun scramble(input: String, operations: List<Operation>): String {
         var password = input
         operations.forEach { password = it.apply(password) }
