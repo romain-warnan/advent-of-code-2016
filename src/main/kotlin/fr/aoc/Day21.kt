@@ -1,9 +1,29 @@
 package fr.aoc
 
+import java.io.File
+
 class Day21 {
 
     fun part1(path: String, input: String): String {
-        return ""
+        var password = input
+        println(password)
+        File(path)
+            .readLines()
+            .map { operationFromLine(it) }
+            .forEach {
+                password = it.apply(password)
+                println(password)
+            }
+        return password
+    }
+
+    private fun operationFromLine(input: String) = when {
+        input.matches(SwapPosition.REGEX) -> SwapPosition(input)
+        input.matches(SwapLetter.REGEX) -> SwapLetter(input)
+        input.matches(Rotate.REGEX) -> Rotate(input)
+        input.matches(RotateLetter.REGEX) -> RotateLetter(input)
+        input.matches(ReversePosition.REGEX) -> ReversePosition(input)
+        else -> Move(input)
     }
 
     interface Operation {
@@ -17,7 +37,7 @@ class Day21 {
         var y: Int
 
         companion object {
-            val REGEX = Regex.fromLiteral("swap position (\\d+) with position (\\d+)")
+            val REGEX = Regex("swap position (\\d+) with position (\\d+)")
         }
 
         init {
@@ -44,7 +64,7 @@ class Day21 {
         var y: Char
 
         companion object {
-            val REGEX = Regex.fromLiteral("swap letter ([a-z]) with letter ([a-z])")
+            val REGEX = Regex("swap letter ([a-z]) with letter ([a-z])")
         }
 
         init {
@@ -56,10 +76,10 @@ class Day21 {
         override fun regex() = REGEX
 
         override fun apply(input: String): String {
-            input.replace(x, '$')
-            input.replace(y, x)
-            input.replace('$', y)
-            return input
+            var output = input.replace(x, '$')
+            output = output.replace(y, x)
+            output = output.replace('$', y)
+            return output
         }
     }
 
@@ -69,7 +89,7 @@ class Day21 {
         var steps: Int
 
         companion object {
-            val REGEX = Regex.fromLiteral("rotate (left|right) (\\d+) steps")
+            val REGEX = Regex("rotate (left|right) (\\d+) steps?")
         }
 
         init {
@@ -91,7 +111,7 @@ class Day21 {
         var x: Char
 
         companion object {
-            val REGEX = Regex.fromLiteral("rotate based on position of letter ([a-z])")
+            val REGEX = Regex("rotate based on position of letter ([a-z])")
         }
 
         init {
@@ -114,7 +134,7 @@ class Day21 {
         var y: Int
 
         companion object {
-            val REGEX = Regex.fromLiteral("swap position (\\d+) with position (\\d+)")
+            val REGEX = Regex("reverse positions (\\d+) through (\\d+)")
         }
 
         init {
@@ -141,7 +161,7 @@ class Day21 {
         var y: Int
 
         companion object {
-            val REGEX = Regex.fromLiteral("move position (\\d+) to position (\\d+)")
+            val REGEX = Regex("move position (\\d+) to position (\\d+)")
         }
 
         init {
