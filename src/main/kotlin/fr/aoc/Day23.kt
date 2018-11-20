@@ -8,6 +8,7 @@ class Day23 {
     var instructions = mutableListOf<Instruction>()
 
     fun part1(path: String): Int {
+        registry["a"] = 7
         instructions = File(path).readLines()
             .map { instruction(it) }
             .toMutableList()
@@ -20,10 +21,10 @@ class Day23 {
     }
 
     fun part2(path: String): Int {
+        registry["a"] = 12
         val instructions = File(path).readLines()
-                .map { instruction(it) }
-                .toList()
-        registry["c"] = 1
+            .map { instruction(it) }
+            .toList()
         while (registry.current in instructions.indices) {
             instructions[registry.current].apply()
         }
@@ -38,7 +39,7 @@ class Day23 {
         "inc" -> Inc(tokens[1])
         "dec" -> Dec(tokens[1])
         "jnz" -> Jnz(tokens[1], tokens[2])
-        else -> Tgl(tokens[1])
+        else  -> Tgl(tokens[1])
     }
 
     fun eval(expr: String) = when {
@@ -57,7 +58,7 @@ class Day23 {
         var current = 0
 
         private val registry = hashMapOf(
-            'a' to 7,
+            'a' to 0,
             'b' to 0,
             'c' to 0,
             'd' to 0
