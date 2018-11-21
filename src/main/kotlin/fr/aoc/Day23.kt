@@ -21,7 +21,7 @@ class Day23 {
     }
 
     fun part2(path: String): Int {
-        registry["a"] = 12
+        registry["a"] = factorial(12)
         val instructions = File(path).readLines()
             .map { instruction(it) }
             .toList()
@@ -30,6 +30,11 @@ class Day23 {
         }
 
         return registry["a"]
+    }
+
+    private fun factorial(n: Int): Int = when(n) {
+        0 -> 1
+        else -> n * factorial(n - 1)
     }
 
     private fun instruction(line: String) = instruction(line.split(" "))
@@ -57,7 +62,7 @@ class Day23 {
     inner class Registry {
         var current = 0
 
-        private val registry = hashMapOf(
+        val registry = hashMapOf(
             'a' to 0,
             'b' to 0,
             'c' to 0,
