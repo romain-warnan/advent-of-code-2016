@@ -62,7 +62,7 @@ class Day23 {
     inner class Registry {
         var current = 0
 
-        val registry = hashMapOf(
+        private val registry = hashMapOf(
             'a' to 0,
             'b' to 0,
             'c' to 0,
