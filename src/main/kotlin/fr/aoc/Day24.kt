@@ -5,8 +5,8 @@ import java.io.File
 class Day24 {
 
     fun part1(path: String): Int {
-        val maze = maze("src/main/resources/input24")
-        val startPoint = maze.startPoint()
+        val maze = maze(path)
+        maze.paths(0).forEach { println(it) }
         return -1
     }
 
@@ -28,17 +28,25 @@ class Day24 {
             for (i in points.indices) {
                 val line = this[i]
                 for (j in line.indices) {
-                    if(this[i][j] == number) return Point(i, j)
+                    if(points[i][j] == number) return Point(i, j)
                 }
             }
             return Point(-1, -1)
         }
 
-        fun startPoint() = findPoint(0)
+        fun paths(startValue: Int): List<Path> {
+            return paths(startValue, findPoint(startValue), mutableListOf(), null)
+        }
 
-        fun paths(startValue: Int, point: Point, paths: MutableList<Path>): List<Path> {
-            if(point.isNumber()) {
+        fun paths(startValue: Int, point: Point, paths: MutableList<Path>, previousWay: Way?): List<Path> {
+            if(point.isNumber() && point.number() != startValue) {
                 paths += Path(startValue, point.number(), point.distance)
+            }
+            else {
+                enumValues<Way>()
+                    .filter { point.canMove(it) }
+                    .filter { previousWay == null || it != -previousWay }
+                    .forEach { paths(startValue, point.move(it), paths, it) }
             }
             return paths
         }
@@ -72,10 +80,17 @@ class Day24 {
         }
 
     }
+}
 
-    inner class Path(val from: Int, val to: Int, val length: Int)
+data class Path(val from: Int, val to: Int, val length: Int)
 
-    enum class Way {
-        NORTH, SOUTH, WEST, EAST
+enum class Way {
+    NORTH, SOUTH, WEST, EAST;
+
+    operator fun unaryMinus() = when(this) {
+        NORTH -> SOUTH
+        SOUTH -> NORTH
+        WEST -> EAST
+        EAST -> WEST
     }
 }
