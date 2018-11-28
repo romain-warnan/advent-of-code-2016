@@ -6,11 +6,13 @@ class Day24 {
 
     fun part1(path: String): Int {
         val maze = maze(path)
-        maze.paths(0).forEach { println(it) }
+        for (n in 0..4) {
+            maze.paths(n)
+        }
         return -1
     }
 
-    fun maze(path: String): Maze {
+    private fun maze(path: String): Maze {
         var points = arrayOf<CharArray>()
         File(path).readLines()
             .forEach {points += it.toCharArray()}
@@ -22,7 +24,7 @@ class Day24 {
 
         operator fun get(index: Int) = this.points[index]
 
-        fun findPoint(number: Int) = findPoint(number.toString()[0])
+        private fun findPoint(number: Int) = findPoint(number.toString()[0])
 
         private fun findPoint(number: Char): Point {
             for (i in points.indices) {
@@ -35,50 +37,71 @@ class Day24 {
         }
 
         fun paths(startValue: Int): List<Path> {
-            return paths(startValue, findPoint(startValue), mutableListOf(), null)
+            return paths(startValue, findPoint(startValue), mutableListOf())
         }
 
-        fun paths(startValue: Int, point: Point, paths: MutableList<Path>, previousWay: Way?): List<Path> {
+        private fun paths(startValue: Int, point: Point, paths: MutableList<Path>): List<Path> {
             if(point.isNumber() && point.number() != startValue) {
-                paths += Path(startValue, point.number(), point.distance)
+                val path = Path(startValue, point.number(), point.visited.size)
+                println(path)
+                paths += path
+                point.visited.removeAll {true}
             }
             else {
                 enumValues<Way>()
                     .filter { point.canMove(it) }
-                    .filter { previousWay == null || it != -previousWay }
-                    .forEach { paths(startValue, point.move(it), paths, it) }
+                    .forEach { paths(startValue, point.move(it), paths) }
             }
             return paths
         }
 
-        inner class Point(val i: Int, val j: Int) {
+        inner class Point(private val i: Int, private val j: Int, val visited: MutableList<Point> = mutableListOf()) {
 
-            var distance = 0
+            private fun isWall() = points[i][j] == '#'
 
-            fun isWall() = points[i][j] == '#'
-
-            fun isPath() = points[i][j] == '.'
+            private fun isPath() = points[i][j] == '.'
 
             fun isNumber() = !isWall() && !isPath()
 
             fun number() = when {
-                isNumber() -> points[i][j].toInt()
+                isNumber() -> points[i][j].toString().toInt()
                 else -> -1
             }
 
-            fun move(way: Way): Point {
-                distance ++
-                return when (way) {
-                    Way.NORTH -> Point(i - 1, j)
-                    Way.SOUTH -> Point(i + 1, j)
-                    Way.EAST -> Point(i, j + 1)
-                    Way.WEST -> Point(i, j - 1)
-                }
+            private fun nextPoint(way: Way) = when (way) {
+                Way.NORTH -> Point(i - 1, j, visited)
+                Way.SOUTH -> Point(i + 1, j, visited)
+                Way.EAST -> Point(i, j + 1, visited)
+                Way.WEST -> Point(i, j - 1, visited)
             }
 
-            fun canMove(way: Way) = !move(way).isWall()
-        }
+            fun canMove(way: Way): Boolean {
+                val nextPoint = nextPoint(way)
+                return !nextPoint.isWall() && nextPoint !in visited
+            }
 
+            fun move(way: Way): Point {
+                println(way)
+                val nextPoint = nextPoint(way)
+                nextPoint.visited += this
+                return nextPoint
+            }
+
+            override fun hashCode(): Int{
+                return i + 31 * j
+            }
+
+            override fun equals(other: Any?): Boolean{
+                if (this === other) return true
+                if (other?.javaClass != javaClass) return false
+                other as Point
+                return this.i == other.i && this.j == other.j
+            }
+
+            override fun toString(): String {
+                return "($i x $j)"
+            }
+        }
     }
 }
 
